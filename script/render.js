@@ -13,8 +13,7 @@ var noop = function() {};
 var url = args[1];
 var width = args[2];
 var height = args[3];
-var timeout = args[4];
-var format = args[5];
+var format = args[4];
 
 /**
  * Initialize page.
@@ -39,16 +38,19 @@ page.onError = noop;
  * Open and render page.
  */
 
-page.open(url, function (status) {
-  if (status !== 'success') throw new Error('Unable to load');
-  window.setTimeout(function () {
-    page.evaluate(function() {
-      if (!document.body.style.background) {
-        document.body.style.backgroundColor = 'white';
-      }
-    });
-    console.log(page.renderBase64(format));
-    phantom.exit();
-  }, timeout);
-});
+page.onInitialized = function() {
+  page.evaluate(function(domContentLoadedMsg) {
+    document.addEventListener('DOMContentLoaded', function() {
+      window.app.on('afterDraw', function(){
+        window.callPhantom('DOMContentLoaded');
+      });
+    }, false);
+  });
+};
 
+page.onCallback = function(data) {
+  console.log(page.renderBase64(format));
+  phantom.exit();
+};
+
+page.open(url);

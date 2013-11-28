@@ -21,11 +21,9 @@ var server = http.createServer(function(req, res) {
     var s = Screenshot(url)
       .width(1024)
       .height(768)
-      .timeout(100)
       .format('jpeg');
     t.equal(s._width, 1024);
     t.equal(s._height, 768);
-    t.equal(s._timeout, 100);
     t.equal(s._format, 'JPG');
     t.end();
   });
@@ -34,13 +32,11 @@ var server = http.createServer(function(req, res) {
     var s = Screenshot(url, {
       width: 1024,
       height: 768,
-      timeout: 100,
       format: 'jpeg',
       url: 'trololo'
     });
     t.equal(s._width, 1024);
     t.equal(s._height, 768);
-    t.equal(s._timeout, 100);
     t.equal(s._format, 'JPG');
     t.equal(s.url, url);
     t.end();

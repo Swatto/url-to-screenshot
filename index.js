@@ -49,19 +49,6 @@ Screenshot.prototype.height = function(height) {
 };
 
 /**
- * Set `timeout` for PhantomJS.
- *
- * @param {Number} timeout
- * @return {Screenshot}
- * @todo Find more flexible mechanism
- */
-
-Screenshot.prototype.timeout = function(timeout) {
-  this._timeout = timeout;
-  return this;
-};
-
-/**
  * Set output image format.
  *
  * Supported formats:
@@ -99,7 +86,7 @@ Screenshot.prototype.capture = function(fn) {
 
   var args = [
     __dirname + '/script/render.js', this.url,
-    this._width, this._height, this._timeout, this._format
+    this._width, this._height, this._format
   ];
 
   var opts = {
