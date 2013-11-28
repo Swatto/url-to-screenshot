@@ -16,7 +16,6 @@ function Screenshot(url, opts) {
 
   this.width(1024);
   this.height(768);
-  this.timeout(0);
   this.format('png');
 
   Object.keys(opts || {}).forEach(function (key) {
