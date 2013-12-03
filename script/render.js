@@ -42,6 +42,8 @@ page.onInitialized = function() {
   page.evaluate(function(domContentLoadedMsg) {
     document.addEventListener('DOMContentLoaded', function() {
       window.app.on('afterDraw', function(){
+        var cookie = document.querySelector(".cookies");
+        cookie.parentNode.removeChild(cookie);
         window.callPhantom('DOMContentLoaded');
       });
     }, false);
