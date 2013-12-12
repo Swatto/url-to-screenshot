@@ -44,10 +44,11 @@ page.onInitialized = function() {
       document.body.style.backgroundColor = '#ffffff';
       var second = 0;
       var getOut = function(){
-        if(second >= 1){
-          window.callPhantom('error');
+        if(second >= 20){
+          window.callPhantom({message: 'error'});
         }else{
           second++;
+          window.setTimeout(getOut(), 1000);
         }
       };
       window.setTimeout(getOut(), 1000);
@@ -57,7 +58,7 @@ page.onInitialized = function() {
         var img = document.createElement('img');
         img.src = 'http://vp-seo-images.s3.amazonaws.com/logo.svg';
         img.onload = function(){
-          window.callPhantom('ok');
+          window.callPhantom({message: 'ok'});
         }
         img.style.maxWidth = '250px';
         img.style.position = 'fixed';
@@ -71,10 +72,10 @@ page.onInitialized = function() {
 };
 
 page.onCallback = function(data) {
-  if(data=='ok'){
+  if(data.message=='ok'){
     console.log(page.renderBase64(format));
   }else{
-    console.log(false);
+    console.log('error');
   }
   phantom.exit();
 };
