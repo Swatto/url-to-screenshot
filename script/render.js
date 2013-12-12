@@ -42,13 +42,22 @@ page.onInitialized = function() {
   page.evaluate(function(domContentLoadedMsg) {
     document.addEventListener('DOMContentLoaded', function() {
       document.body.style.backgroundColor = '#ffffff';
+      var second = 0;
+      var getOut = function(){
+        if(second >= 1){
+          window.callPhantom('error');
+        }else{
+          second++;
+        }
+      };
+      window.setTimeout(getOut(), 1000);
       window.app.on('afterDraw', function(){
         var cookie = document.querySelector(".cookies");
         cookie.parentNode.removeChild(cookie);
         var img = document.createElement('img');
         img.src = 'http://vp-seo-images.s3.amazonaws.com/logo.svg';
         img.onload = function(){
-          window.callPhantom('DOMContentLoaded');
+          window.callPhantom('ok');
         }
         img.style.maxWidth = '250px';
         img.style.position = 'fixed';
@@ -62,7 +71,11 @@ page.onInitialized = function() {
 };
 
 page.onCallback = function(data) {
-  console.log(page.renderBase64(format));
+  if(data=='ok'){
+    console.log(page.renderBase64(format));
+  }else{
+    console.log(false);
+  }
   phantom.exit();
 };
 
