@@ -93,6 +93,7 @@ Screenshot.prototype.capture = function(fn) {
   };
 
   exec('phantomjs ' + args.join(' '), opts, function (err, stdout) {
+    console.log(stdout);
     fn(err, stdout && new Buffer(stdout, 'base64'));
   });
 };
