@@ -54,7 +54,9 @@ page.onInitialized = function() {
       window.setTimeout(getOut(), 1000);
       window.app.on('afterDraw', function(){
         var cookie = document.querySelector(".cookies");
-        cookie.parentNode.removeChild(cookie);
+        if(cookie){
+          cookie.parentNode.removeChild(cookie);
+        }
         var img = document.createElement('img');
         img.src = 'http://vp-seo-images.s3.amazonaws.com/logo.svg';
         img.onload = function(){
