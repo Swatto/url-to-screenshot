@@ -48,27 +48,27 @@ page.onInitialized = function() {
           window.callPhantom({message: 'error'});
         }else{
           second++;
-          window.setTimeout(getOut(), 1000);
+          window.setTimeout(getOut, 1000);
         }
       };
-      window.setTimeout(getOut(), 1000);
-      window.app.on('afterDraw', function(){
-        var cookie = document.querySelector(".cookies");
-        if(cookie){
+      if(typeof window.app === 'object' && typeof window.app.on === 'function'){
+        window.app.on('afterDraw', function(){
+          var cookie = document.querySelector(".cookies");
           cookie.parentNode.removeChild(cookie);
-        }
-        var img = document.createElement('img');
-        img.src = 'http://vp-seo-images.s3.amazonaws.com/logo.svg';
-        img.onload = function(){
-          window.callPhantom({message: 'ok'});
-        }
-        img.style.maxWidth = '250px';
-        img.style.position = 'fixed';
-        img.style.bottom = '10px';
-        img.style.right = '10px';
-        img.style.zIndex = '10000000000';
-        document.body.appendChild(img);
-      });
+          var img = document.createElement('img');
+          img.src = 'http://vp-seo-images.s3.amazonaws.com/logo.svg';
+          img.onload = function(){
+            window.callPhantom({message: 'ok'});
+          }
+          img.style.maxWidth = '250px';
+          img.style.position = 'fixed';
+          img.style.bottom = '10px';
+          img.style.right = '10px';
+          img.style.zIndex = '10000000000';
+          document.body.appendChild(img);
+        });
+      }
+      window.setTimeout(getOut, 1000);
     }, false);
   });
 };
@@ -76,10 +76,30 @@ page.onInitialized = function() {
 page.onCallback = function(data) {
   if(data.message=='ok'){
     console.log(page.renderBase64(format));
+  }else if(data.message=='render-v2'){
+    page.evaluate(function(){
+      var toBeRemoved = document.querySelectorAll('.icons, .user, .menu, .cta');
+      for (var i = toBeRemoved.length - 1; i >= 0; i--) {
+        toBeRemoved[i].parentNode.removeChild(toBeRemoved[i]);
+      };
+      document.querySelector('#app').style.height = 525;
+    });
+    console.log(page.renderBase64(format));
   }else{
     console.log('error');
   }
   phantom.exit();
+};
+
+page.onError = function(msg, trace) {
+    var msgStack = ['ERROR: ' + msg];
+    if (trace && trace.length) {
+        msgStack.push('TRACE:');
+        trace.forEach(function(t) {
+            msgStack.push(' -> ' + t.file + ': ' + t.line + (t.function ? ' (in function "' + t.function + '")' : ''));
+        });
+    }
+    console.error(msgStack.join('\n'));
 };
 
 page.open(url);
