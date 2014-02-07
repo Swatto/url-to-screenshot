@@ -78,7 +78,7 @@ page.onCallback = function(data) {
     console.log(page.renderBase64(format));
   }else if(data.message=='render-v2'){
     page.evaluate(function(){
-      var toBeRemoved = document.querySelectorAll('.icons, .user, .menu, .cta');
+      var toBeRemoved = document.querySelectorAll('.icons, .user, .menu, .cta .right, .cta .left, .cta .cta-button, .cta .views-count');
       for (var i = toBeRemoved.length - 1; i >= 0; i--) {
         toBeRemoved[i].parentNode.removeChild(toBeRemoved[i]);
       };
